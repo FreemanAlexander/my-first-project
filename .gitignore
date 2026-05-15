@@ -1,0 +1,30 @@
+# secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# dependencies
+node_modules/
+.venv/
+__pycache__/
+
+# builds
+dist/
+build/
+.next/
+.turbo/
+
+# logs
+*.log
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# local backups
+*.backup-*
