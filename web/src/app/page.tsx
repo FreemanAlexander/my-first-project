@@ -14,10 +14,10 @@ export default function Home() {
             width={1536}
             height={1024}
             priority
-            className="h-14 w-auto sm:h-[72px] lg:h-[88px]"
+            className="h-auto w-[170px] sm:w-[240px] lg:w-[300px]"
           />
 
-          <h1 className="mt-[var(--space-6)] font-display text-[40px] font-medium leading-[48px] sm:mt-[var(--space-8)] sm:text-[56px] sm:leading-[64px] lg:text-[72px] lg:leading-[80px]">
+          <h1 className="mt-[var(--space-4)] font-display text-[40px] font-medium leading-[48px] sm:mt-[var(--space-5)] sm:text-[56px] sm:leading-[64px] lg:text-[72px] lg:leading-[80px]">
             Зрелая работа над тем, какой{" "}
             <span className="text-bronze-deep">масштаб</span> вы способны
             держать.
