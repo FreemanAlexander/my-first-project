@@ -14,9 +14,9 @@
   --color-status-danger: #8c3a2e;
   --color-status-info: #232a31;
 
-  --font-display: "Literata", Georgia, serif;
-  --font-body: "Lora", Georgia, serif;
-  --font-ui: "Manrope", "Inter", system-ui, sans-serif;
+  --font-display: var(--font-literata), Georgia, serif;
+  --font-body: var(--font-lora), Georgia, serif;
+  --font-ui: var(--font-manrope), "Inter", system-ui, sans-serif;
 
   --radius-sharp: 0px;
   --radius-s: 4px;
