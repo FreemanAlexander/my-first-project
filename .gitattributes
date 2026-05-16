@@ -1,0 +1,46 @@
+# Нормализация переводов строк: в репозитории всегда LF, локально — как у системы.
+* text=auto eol=lf
+
+# Явный текст для типов, которые часто определяются ошибочно.
+*.md       text
+*.json     text
+*.yml      text
+*.yaml     text
+*.toml     text
+*.ini      text
+*.cfg      text
+*.env      text
+*.example  text
+*.ts       text
+*.tsx      text
+*.js       text
+*.jsx      text
+*.mjs      text
+*.cjs      text
+*.css      text
+*.scss     text
+*.html     text
+*.py       text
+*.sh       text eol=lf
+
+# Бинарные файлы — не трогать line endings и не показывать диффом.
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.webp     binary
+*.ico      binary
+*.pdf      binary
+*.woff     binary
+*.woff2    binary
+*.ttf      binary
+*.otf      binary
+*.zip      binary
+*.gz       binary
+
+# Lock-файлы и автогенерируемые артефакты — скрыть из обзора PR на GitHub.
+package-lock.json   linguist-generated=true
+pnpm-lock.yaml      linguist-generated=true
+yarn.lock           linguist-generated=true
+poetry.lock         linguist-generated=true
+uv.lock             linguist-generated=true
