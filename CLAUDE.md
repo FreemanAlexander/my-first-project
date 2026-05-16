@@ -16,10 +16,15 @@
 - Главные проектные правила теперь лежат в `.claude/CLAUDE.md`; корневой `CLAUDE.md` оставляем синхронизированным, чтобы Claude Code точно видел контекст проекта.
 
 ### Stack
-- Язык: [TypeScript 5.x / Python 3.12 / Go 1.22]
-- Фреймворк: [Next.js 15 / FastAPI / aiogram]
-- БД: [Supabase Postgres / SQLite / MongoDB]
-- Deploy: [Vercel / Timeweb / Fly.io]
+- Язык: TypeScript 5.x (frontend) + Python 3.12 (bot/backend)
+- Фреймворк (лендинг): Next.js 15 (App Router)
+- Фреймворк (бот): aiogram 3.x
+- Backend API (при необходимости): FastAPI
+- БД: Supabase Postgres
+- ORM / DB layer: окончательно не зафиксирован. Кандидаты: для web — Drizzle или Prisma; для Python — SQLAlchemy или asyncpg. Выбор делаем перед этапом 5 (Database).
+- Admin: на первом MVP — внутри Telegram-бота (команды + inline-кнопки), отдельной веб-админки нет.
+- Deploy (лендинг): Vercel.
+- Deploy (бот / backend): VPS или Fly.io, окончательное решение принимаем перед этапом 7 (Deploy).
 
 ### Map
 - https://agentos.edgelab.su/ — платформа интенсива AgentOS.
