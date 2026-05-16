@@ -15,7 +15,7 @@
 - [x] Добавить `.editorconfig` и базовые конфиги линтеров/форматтеров под выбранный стек. (Сейчас без зависимостей: `.editorconfig`, `.gitattributes`. Линтеры/форматтеры — отложены в `docs/tooling.md` до этапов 2, 3 и 6.)
 - [x] Обновить `.gitignore` под выбранный стек (node_modules / .venv / dist / build / .next / __pycache__).
 - [x] Завести `docs/architecture.md` — короткое описание модулей и их связей (1 страница).
-- [ ] Создать ветку `feature/project-skeleton` и закоммитить скелет.
+- [x] Создать ветку `feature/project-skeleton` и закоммитить скелет.
 
 ## 2. Frontend / лендинг
 
