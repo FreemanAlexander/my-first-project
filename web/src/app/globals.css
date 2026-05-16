@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory-light: #f3eee6;
+  --color-ivory-warm: #e8dfd1;
+  --color-graphite: #232a31;
+  --color-digital-night: #11161c;
+  --color-bronze: #b98952;
+  --color-bronze-deep: #8e6238;
+  --color-elevated: #ffffff;
+
+  --color-status-success: #5c7a4a;
+  --color-status-warning: #b98952;
+  --color-status-danger: #8c3a2e;
+  --color-status-info: #232a31;
+
+  --font-display: var(--font-literata), Georgia, serif;
+  --font-body: var(--font-lora), Georgia, serif;
+  --font-ui: var(--font-manrope), "Inter", system-ui, sans-serif;
+
+  --radius-sharp: 0px;
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --radius-l: 16px;
+
+  --shadow-soft: 0 1px 2px rgba(35, 42, 49, 0.06);
+  --shadow-elevated: 0 12px 32px rgba(35, 42, 49, 0.12);
+}
+
+:root {
+  --bg-page: var(--color-ivory-light);
+  --bg-surface: var(--color-ivory-warm);
+  --bg-elevated: #ffffff;
+  --text-primary: var(--color-graphite);
+  --text-secondary: rgba(35, 42, 49, 0.72);
+  --text-muted: rgba(35, 42, 49, 0.52);
+  --text-accent: var(--color-bronze-deep);
+  --border-hairline: rgba(35, 42, 49, 0.12);
+  --border-strong: rgba(35, 42, 49, 0.24);
+  --accent: var(--color-bronze);
+  --accent-hover: var(--color-bronze-deep);
+
+  --bg-page-dark: var(--color-digital-night);
+  --bg-surface-dark: #171d24;
+  --text-primary-dark: var(--color-ivory-light);
+  --text-secondary-dark: rgba(243, 238, 230, 0.72);
+  --border-hairline-dark: rgba(243, 238, 230, 0.12);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-8: 48px;
+  --space-10: 64px;
+  --space-12: 96px;
+  --space-16: 128px;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

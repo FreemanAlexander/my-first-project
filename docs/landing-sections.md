@@ -201,7 +201,7 @@
 - **Lora** — `--font-body`. Основной длинный текст, описания, FAQ-ответы. Вес: 400. Для смыслового выделения внутри абзаца допустим `italic` только в цитатах.
 - **Manrope** — `--font-ui`. Кнопки, поля ввода, бэйджи, навигация, microcopy, копирайт. Веса: 500 (основной), 600 (заголовки панелей, заголовки FAQ-вопроса в варианте Manrope).
 
-Способ подключения (self-host через `next/font/local` или провайдер Google Fonts через `next/font/google`) фиксируем при выполнении следующего пункта этапа 2 в `tasks/todo.md` («Подключить шрифты Literata, Lora, Manrope»). До этого момента в этом документе только роли и веса — без конкретных импортов.
+Подключены через `next/font/google` в `web/src/app/layout.tsx`. Subsets: `latin` + `cyrillic`. CSS-переменные, прокинутые в `<body>` через `*.variable`: `--font-literata` (Literata 400/500), `--font-lora` (Lora 400), `--font-manrope` (Manrope 500/600). В `web/src/app/globals.css` они проброшены в токены `--font-display`, `--font-body`, `--font-ui` соответственно.
 
 ## Что НЕ делаем на лендинге
 

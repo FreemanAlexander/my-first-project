@@ -20,8 +20,9 @@
 ## 2. Frontend / лендинг
 
 - [x] Зафиксировать секции лендинга в `docs/landing-sections.md` (hero, проблема/боль, что такое проект, как работает связка лендинг + Telegram-бот, преимущества, диагностика/заявка, CTA, FAQ, footer) — список секций, без вёрстки.
-- [ ] Перенести design tokens из `design.md` в код: CSS variables / theme-файл (цвета, типографика, spacing, радиусы, тени).
-- [ ] Подключить шрифты Literata, Lora, Manrope (self-host или провайдер) и описать в `docs/landing-sections.md`.
+- [x] Инициализировать Next.js 15.5.18 проект в `web/` с TypeScript, Tailwind v4, ESLint, App Router и `src/`.
+- [x] Перенести design tokens из `design.md` в код: CSS variables / theme-файл (цвета, типографика, spacing, радиусы, тени).
+- [x] Подключить шрифты Literata, Lora, Manrope (self-host или провайдер) и описать в `docs/landing-sections.md`.
 - [ ] Сверстать hero-секцию по `design.md` (центральная ось, один Primary CTA, без капса и восклицаний).
 - [ ] Сверстать остальные секции по списку из `docs/landing-sections.md`, по одной за итерацию.
 - [ ] Сверстать форму заявки (поля, валидация, состояния error / success согласно `design.md`).
