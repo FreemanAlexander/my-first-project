@@ -23,7 +23,7 @@
 - [x] Инициализировать Next.js 15.5.18 проект в `web/` с TypeScript, Tailwind v4, ESLint, App Router и `src/`.
 - [x] Перенести design tokens из `design.md` в код: CSS variables / theme-файл (цвета, типографика, spacing, радиусы, тени).
 - [x] Подключить шрифты Literata, Lora, Manrope (self-host или провайдер) и описать в `docs/landing-sections.md`.
-- [ ] Сверстать hero-секцию по `design.md` (центральная ось, один Primary CTA, без капса и восклицаний).
+- [x] Сверстать hero-секцию по `design.md` (центральная ось, один Primary CTA, без капса и восклицаний).
 - [ ] Сверстать остальные секции по списку из `docs/landing-sections.md`, по одной за итерацию.
 - [ ] Сверстать форму заявки (поля, валидация, состояния error / success согласно `design.md`).
 - [ ] Прогнать адаптив по брейкпоинтам `--bp-sm / md / lg / xl` из `design.md`.
