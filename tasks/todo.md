@@ -58,7 +58,7 @@
 
 - [x] Описать схему данных в `db/schema.md`: MVP-таблицы `leads` (включая `consent_*` поля для 152-ФЗ), `audit_log`, `admins` со статусами заявки, PII-картой, индексами и тем, что хранить нельзя. `users`, `broadcasts`, `faq_items` отложены явно.
 - [ ] Завести миграции (инструмент по стеку: Prisma / Alembic / Drizzle / голый SQL).
-- [ ] Дополнить `.env.example` всеми ключами: `BOT_TOKEN`, `DATABASE_URL`, `ADMIN_IDS`, `WEB_BASE_URL`, `CONSENT_POLICY_VERSION`, ключи внешних сервисов.
+- [x] Дополнить `.env.example` каноническим набором ключей с комментариями: `BOT_TOKEN`, `ADMIN_IDS`, `DATABASE_URL`, `WEB_BASE_URL`, `APP_ENV`, `DB_MODE`, `PD_STORAGE_REGION`, `CONSENT_POLICY_VERSION`, `INTERNAL_BOT_NOTIFY_SECRET`. Реальные значения не коммитим.
 - [ ] Проверить `.gitignore`: `.env`, `.env.*`, `*.key`, `*.pem`, `secrets/` должны игнорироваться.
 - [ ] Зафиксировать порядок локального запуска (DB up → migrate → seed → bot/web up) в `docs/local-run.md`.
 - [ ] Подготовить минимальный seed-набор данных для локальной разработки (только синтетические ПДн, реальные не использовать).
