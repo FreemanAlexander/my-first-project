@@ -18,7 +18,7 @@
 - **Ошибки:** единый формат (см. ниже).
 - **Аутентификация лендинга → backend:** простой `Content-Type: application/json` + защита от спама (rate limit + honeypot). Cookies/JWT в MVP не используются.
 - **Аутентификация бота → backend:** не нужна, бот общается с БД напрямую через `DATABASE_URL`.
-- **Аутентификация webhook backend → бот:** заголовок `X-Bot-Webhook-Secret: <BOT_WEBHOOK_SECRET>`.
+- **Аутентификация webhook backend → бот:** заголовок `X-Bot-Webhook-Secret: <INTERNAL_BOT_NOTIFY_SECRET>` (значение env-переменной `INTERNAL_BOT_NOTIFY_SECRET`).
 - **Согласие на обработку ПДн (152-ФЗ).** Эндпоинты, принимающие ПДн от лендинга, требуют явного согласия в теле запроса (`consent_personal_data: true`) и валидной версии согласия. Сервер дополнительно фиксирует IP и User-Agent. Подробнее — `docs/backend-decision.md`, раздел «152-ФЗ и локализация ПДн».
 
 ## Окружения
@@ -146,7 +146,7 @@ Content-Type: application/json
 ```http
 POST /api/bot/notify
 Content-Type: application/json
-X-Bot-Webhook-Secret: <BOT_WEBHOOK_SECRET>
+X-Bot-Webhook-Secret: <INTERNAL_BOT_NOTIFY_SECRET>
 ```
 
 ```json

@@ -123,7 +123,7 @@ ADMIN_IDS=                     # whitelist через запятую
 
 # Связь web ↔ bot (если понадобится webhook со стороны лендинга в бот)
 WEB_BASE_URL=
-BOT_WEBHOOK_SECRET=
+INTERNAL_BOT_NOTIFY_SECRET=    # секрет для X-Bot-Webhook-Secret header
 
 # 152-ФЗ
 CONSENT_POLICY_VERSION=        # версия согласия на ОПД (например, "2026-05-18")
