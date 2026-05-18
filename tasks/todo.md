@@ -76,7 +76,8 @@
 ## 7. Deploy
 
 - [ ] Выбрать платформу для лендинга и для бота, зафиксировать в `docs/deploy.md`. Лендинг по умолчанию — Vercel. Бот — RU-hosted VPS / Fly (в РФ-регионе).
-- [ ] Поднять Yandex Cloud Managed PostgreSQL (или другой RU-hosted Postgres) для production. Прогнать миграции из `db/schema.md`.
+- [x] Подготовить production setup checklist в `docs/yandex-cloud-setup.md` (folder, кластер, БД, сеть, DATABASE_URL, секреты, pre-prod smoke, ссылки на юр-пакет 152-ФЗ).
+- [ ] Поднять Yandex Cloud Managed PostgreSQL (или другой RU-hosted Postgres) для production по шагам `docs/yandex-cloud-setup.md`. Прогнать миграции из `db/schema.md`.
 - [ ] Переключить production `DATABASE_URL` с Supabase на RU-инстанс. Sandbox-Supabase остаётся для dev/preview.
 - [ ] Описать список environment-переменных в проде и где они хранятся (никогда не в git). Включая `CONSENT_POLICY_VERSION`.
 - [ ] Подготовить production-конфиг бота: webhook URL, HTTPS, healthcheck.
