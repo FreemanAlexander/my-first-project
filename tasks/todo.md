@@ -33,6 +33,8 @@
 
 ## 3. Backend / Telegram-бот
 
+- [x] Зафиксировать backend-платформу MVP в `docs/backend-decision.md` (Supabase Postgres как единое хранилище для лендинга и бота, сервисный ключ — только на сервере).
+- [x] Описать контракт фронт ↔ backend в `api.md` (`POST /api/leads`, формат ошибок, окружения, опциональный webhook в бот).
 - [ ] Зафиксировать сценарии бота в `docs/bot-flows.md`: `/start`, заявка на лендинг → уведомление в бот, FAQ, рассылки.
 - [ ] Создать `bot/` со структурой: `handlers/`, `services/`, `db/`, `config/`, точка входа.
 - [ ] Реализовать загрузку конфигурации из `.env` (токен, режим webhook/polling, admin ids).
