@@ -65,3 +65,9 @@ Thumbs.db
 
 # local backups
 *.backup-*
+
+# docker volumes (Postgres data, etc.)
+docker/*/data/
+
+# Claude Code (local runtime artifacts)
+.claude/scheduled_tasks.lock
