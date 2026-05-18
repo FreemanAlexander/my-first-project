@@ -1,6 +1,6 @@
 # API contract — лендинг ↔ backend ↔ бот
 
-Контракт связи между фронтендом (Next.js на Vercel) и backend (Supabase Postgres + сервисные роуты + Telegram-бот).
+Контракт связи между фронтендом (Next.js на Vercel) и backend (PostgreSQL + сервисные роуты + Telegram-бот). В sandbox БД — Supabase Postgres, в production — RU-hosted Postgres (Yandex Cloud Managed PostgreSQL). Контракт одинаковый, отличается только `DATABASE_URL` и хостинг — см. `docs/backend-decision.md`.
 
 Источник решения: `docs/backend-decision.md`. Архитектура: `docs/architecture.md`. Правила проекта: `.claude/CLAUDE.md`.
 
@@ -19,6 +19,7 @@
 - **Аутентификация лендинга → backend:** простой `Content-Type: application/json` + защита от спама (rate limit + honeypot). Cookies/JWT в MVP не используются.
 - **Аутентификация бота → backend:** не нужна, бот общается с БД напрямую через `DATABASE_URL`.
 - **Аутентификация webhook backend → бот:** заголовок `X-Bot-Webhook-Secret: <BOT_WEBHOOK_SECRET>`.
+- **Согласие на обработку ПДн (152-ФЗ).** Эндпоинты, принимающие ПДн от лендинга, требуют явного согласия в теле запроса (`consent_personal_data: true`) и валидной версии согласия. Сервер дополнительно фиксирует IP и User-Agent. Подробнее — `docs/backend-decision.md`, раздел «152-ФЗ и локализация ПДн».
 
 ## Окружения
 
@@ -51,6 +52,7 @@
 | Код                  | HTTP | Когда                                                          |
 |----------------------|------|----------------------------------------------------------------|
 | `VALIDATION_ERROR`   | 400  | Запрос не прошёл валидацию схемы                               |
+| `CONSENT_REQUIRED`   | 400  | Не получено согласие на обработку ПДн или неизвестная версия   |
 | `RATE_LIMITED`       | 429  | Слишком много запросов с одного IP / на один эндпоинт          |
 | `UNAUTHORIZED`       | 401  | Нет валидного секрета на защищённом эндпоинте                  |
 | `NOT_FOUND`          | 404  | Ресурс не найден                                               |
@@ -85,19 +87,33 @@ Content-Type: application/json
   "contact": "@username | +7900... | email",
   "message": "Хочу диагностику",
   "source": "landing-hero",
-  "honeypot": ""
+  "honeypot": "",
+  "consent_personal_data": true,
+  "consent_policy_version": "2026-05-18"
 }
 ```
 
 Поля:
 
-| Поле        | Тип      | Обязательное | Правило                                                        |
-|-------------|----------|--------------|----------------------------------------------------------------|
-| `name`      | string   | да           | 2..80 символов, trim                                           |
-| `contact`   | string   | да           | 3..120 символов, любой формат (telegram / phone / email)       |
-| `message`   | string   | нет          | 0..2000 символов                                               |
-| `source`    | string   | нет          | идентификатор секции/CTA (`landing-hero`, `landing-cta`, ...)  |
-| `honeypot`  | string   | да           | должен быть пустым; если заполнен — заявка молча отбрасывается |
+| Поле                      | Тип      | Обязательное | Правило                                                              |
+|---------------------------|----------|--------------|----------------------------------------------------------------------|
+| `name`                    | string   | да           | 2..80 символов, trim                                                 |
+| `contact`                 | string   | да           | 3..120 символов, любой формат (telegram / phone / email)             |
+| `message`                 | string   | нет          | 0..2000 символов                                                     |
+| `source`                  | string   | нет          | идентификатор секции/CTA (`landing-hero`, `landing-cta`, ...)        |
+| `honeypot`                | string   | да           | должен быть пустым; если заполнен — заявка молча отбрасывается       |
+| `consent_personal_data`   | boolean  | да           | строго `true`; иначе `400 CONSENT_REQUIRED`                          |
+| `consent_policy_version`  | string   | да           | версия согласия (например `"2026-05-18"`); должна совпадать с `CONSENT_POLICY_VERSION` сервера, иначе `400 CONSENT_REQUIRED` |
+
+**Серверная фиксация согласия.** На стороне Next.js Route Handler сервер дополнительно сохраняет:
+
+- `consent_given_at` — момент приёма запроса (`now()` сервера, UTC);
+- `consent_ip` — IP клиента из заголовка прокси (`x-forwarded-for` первый адрес) или `request.ip`;
+- `consent_user_agent` — заголовок `User-Agent` запроса.
+
+Эти поля **не передаются клиентом** и не валидируются от него. Подробнее о хранении — `db/schema.md`, раздел про `leads`.
+
+**Чекбокс на форме.** Лендинг-форма в production обязана содержать видимый чекбокс «Я согласен на обработку персональных данных» со ссылкой на действующую Privacy Policy / текст согласия. В sandbox-окружениях (`local`, `preview`) допускается заглушка с пометкой «тестовая среда, реальные ПДн не вводить».
 
 #### Ответ — 200 OK
 
@@ -112,8 +128,9 @@ Content-Type: application/json
 #### Ошибки
 
 - `400 VALIDATION_ERROR` — невалидные поля.
+- `400 CONSENT_REQUIRED` — `consent_personal_data` не `true` или `consent_policy_version` отсутствует / не совпадает с серверной. Заявка не сохраняется.
 - `429 RATE_LIMITED` — превышен лимит (например, > 5 заявок / минуту с IP).
-- `500 INTERNAL_ERROR` — БД недоступна или сбой уведомления (заявка всё равно сохраняется, ошибка только в нотификации логируется отдельно).
+- `500 INTERNAL_ERROR` — БД недоступна или сбой уведомления (заявка всё равно сохраняется, если БД доступна; ошибка нотификации логируется отдельно).
 
 ---
 
