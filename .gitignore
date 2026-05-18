@@ -65,3 +65,6 @@ Thumbs.db
 
 # local backups
 *.backup-*
+
+# docker volumes (Postgres data, etc.)
+docker/*/data/

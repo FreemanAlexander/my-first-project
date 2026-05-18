@@ -1,0 +1,24 @@
+# Локальный PostgreSQL для dev/staging на Hetzner.
+# Слушает только 127.0.0.1:5432 — наружу не открыт.
+# Реальные значения POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB
+# берутся из docker/postgres/.env (в git не попадает).
+# Шаблон env — docker/postgres/.env.example.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pml-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
