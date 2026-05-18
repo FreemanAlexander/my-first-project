@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { LeadForm } from "@/components/LeadForm";
 
 export default function Home() {
   return (
@@ -210,6 +211,24 @@ export default function Home() {
               </div>
             </li>
           </ol>
+        </div>
+      </section>
+
+      <div className="mx-auto h-px w-[var(--space-16)] bg-[color:var(--border-hairline)]" />
+
+      <section
+        id="lead"
+        className="px-[var(--space-5)] pt-[var(--space-10)] pb-[var(--space-10)] sm:px-[var(--space-8)] sm:pt-[var(--space-12)] sm:pb-[var(--space-12)] lg:px-[var(--space-12)] lg:pt-[var(--space-16)] lg:pb-[var(--space-16)]"
+      >
+        <div className="mx-auto max-w-[560px]">
+          <h2 className="font-display text-[32px] font-medium leading-[40px] text-[color:var(--text-primary)] sm:text-[40px] sm:leading-[48px]">
+            Оставить заявку
+          </h2>
+          <p className="mt-[var(--space-5)] font-body text-[17px] leading-[28px] text-[color:var(--text-primary)]">
+            Заполните короткую форму — мы свяжемся в течение рабочего дня и
+            договоримся о первой встрече, без оплаты.
+          </p>
+          <LeadForm />
         </div>
       </section>
 
