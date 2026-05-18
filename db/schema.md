@@ -2,9 +2,11 @@
 
 Схема базы данных для учебного проекта AgentOS (продающий лендинг + Telegram-бот с админкой).
 
-Источники: `docs/backend-decision.md` (БД — Supabase Postgres), `api.md` (контракт лендинг ↔ backend), `docs/bot-flows.md` (сценарии бота), `docs/architecture.md` (модули).
+Источники: `docs/backend-decision.md` (двухступенчатая платформа: sandbox = Supabase, prod = Yandex Cloud Managed PostgreSQL), `api.md` (контракт лендинг ↔ backend), `docs/bot-flows.md` (сценарии бота), `docs/architecture.md` (модули).
 
-Документ описывает **намерение**, не миграции. SQL-миграции и подключение к Supabase появятся на отдельном шаге этапа 5 в `tasks/todo.md`. Сейчас ключи и проект Supabase не заводим.
+Документ описывает **намерение**, не миграции. SQL-миграции и подключение к БД появятся на отдельном шаге этапа 5 в `tasks/todo.md`. Сейчас ни Supabase, ни Yandex Cloud не заводим.
+
+Схема одинаковая для sandbox и production — отличается только хостинг и `DATABASE_URL`. Это сознательно: миграции и код переезжают без изменений.
 
 ---
 
@@ -49,21 +51,26 @@ admins  ──┐
 
 Заявки с лендинга. Создаётся по `POST /api/leads` (см. `api.md`). Обрабатывается админом в боте.
 
-| Колонка        | Тип                   | NULL | Default       | Назначение                                     |
-|----------------|-----------------------|------|---------------|------------------------------------------------|
-| `id`           | `uuid`                | no   | `gen_random_uuid()` | первичный ключ заявки                    |
-| `name`         | `text`                | no   | —             | имя из формы, **PII**                          |
-| `contact`      | `text`                | no   | —             | контакт (tg/phone/email), **PII**              |
-| `message`      | `text`                | yes  | —             | сообщение из формы, **PII** (может содержать)  |
-| `source`       | `text`                | yes  | —             | идентификатор секции/CTA (`landing-hero`, ...) |
-| `status`       | `text`                | no   | `'new'`       | состояние заявки (см. ниже)                    |
-| `created_at`   | `timestamptz`         | no   | `now()`       | момент создания                                |
-| `updated_at`   | `timestamptz`         | no   | `now()`       | обновляется триггером при любом UPDATE         |
-| `notified_at`  | `timestamptz`         | yes  | —             | момент успешной доставки уведомления админу    |
-| `accepted_at`  | `timestamptz`         | yes  | —             | первый переход в `in_progress`                 |
-| `done_at`      | `timestamptz`         | yes  | —             | момент закрытия (`done` или `rejected`)        |
-| `accepted_by`  | `bigint`              | yes  | —             | FK → `admins.telegram_id`                      |
-| `done_by`      | `bigint`              | yes  | —             | FK → `admins.telegram_id`                      |
+| Колонка                    | Тип                   | NULL | Default       | Назначение                                                   |
+|----------------------------|-----------------------|------|---------------|--------------------------------------------------------------|
+| `id`                       | `uuid`                | no   | `gen_random_uuid()` | первичный ключ заявки                                  |
+| `name`                     | `text`                | no   | —             | имя из формы, **PII**                                        |
+| `contact`                  | `text`                | no   | —             | контакт (tg/phone/email), **PII**                            |
+| `message`                  | `text`                | yes  | —             | сообщение из формы, **PII** (может содержать)                |
+| `source`                   | `text`                | yes  | —             | идентификатор секции/CTA (`landing-hero`, ...)               |
+| `status`                   | `text`                | no   | `'new'`       | состояние заявки (см. ниже)                                  |
+| `created_at`               | `timestamptz`         | no   | `now()`       | момент создания                                              |
+| `updated_at`               | `timestamptz`         | no   | `now()`       | обновляется триггером при любом UPDATE                       |
+| `notified_at`              | `timestamptz`         | yes  | —             | момент успешной доставки уведомления админу                  |
+| `accepted_at`              | `timestamptz`         | yes  | —             | первый переход в `in_progress`                               |
+| `done_at`                  | `timestamptz`         | yes  | —             | момент закрытия (`done` или `rejected`)                      |
+| `accepted_by`              | `bigint`              | yes  | —             | FK → `admins.telegram_id`                                    |
+| `done_by`                  | `bigint`              | yes  | —             | FK → `admins.telegram_id`                                    |
+| `consent_personal_data`    | `boolean`             | no   | —             | факт согласия на ОПД (всегда `true` на момент `INSERT`)      |
+| `consent_policy_version`   | `text`                | no   | —             | версия текста согласия, под которой подписался клиент        |
+| `consent_given_at`         | `timestamptz`         | no   | `now()`       | момент фиксации согласия сервером (UTC)                      |
+| `consent_ip`               | `inet`                | yes  | —             | IP клиента в момент подачи, **PII**                          |
+| `consent_user_agent`       | `text`                | yes  | —             | User-Agent клиента в момент подачи, **PII**                  |
 
 **Констрейнты:**
 
@@ -71,10 +78,14 @@ admins  ──┐
 - `CHECK (char_length(contact) BETWEEN 3 AND 120)`
 - `CHECK (message IS NULL OR char_length(message) <= 2000)`
 - `CHECK (status IN ('new', 'in_progress', 'done', 'rejected'))`
+- `CHECK (consent_personal_data = true)` — запись без согласия в принципе не создаётся
+- `CHECK (char_length(consent_policy_version) BETWEEN 1 AND 64)`
 - `FOREIGN KEY (accepted_by) REFERENCES admins(telegram_id) ON DELETE SET NULL`
 - `FOREIGN KEY (done_by) REFERENCES admins(telegram_id) ON DELETE SET NULL`
 
 **Не валидируем `contact` регуляркой.** Он может быть `@username`, телефоном, e-mail или произвольной строкой. Разбор формата — на стороне бота при показе кнопок «Связаться с клиентом» (см. `docs/bot-flows.md`).
+
+**Поля `consent_*` — архитектурное требование, а не отложенный TODO.** Они должны существовать в схеме с момента её создания, чтобы prod-миграция не догоняла compliance задним числом. Сервер заполняет их при `INSERT`, см. `api.md`, эндпоинт `POST /api/leads`.
 
 ---
 
@@ -179,25 +190,31 @@ new ──► in_progress ──► done
 
 Под PII в этом проекте понимаем данные, по которым можно идентифицировать или связаться с конкретным человеком.
 
-| Колонка                  | PII? | Комментарий                                               |
-|--------------------------|------|-----------------------------------------------------------|
-| `leads.name`             | да   | имя из формы                                              |
-| `leads.contact`          | да   | контакт клиента (tg/phone/email)                          |
-| `leads.message`          | да*  | свободный текст, может содержать любые данные             |
-| `leads.source`           | нет  | технический идентификатор секции                          |
-| `leads.status`           | нет  | состояние                                                 |
-| `leads.*_at` / `*_by`    | нет  | временные метки и id админов                              |
-| `admins.username`        | да   | telegram-handle админа                                    |
-| `admins.display_name`    | да   | имя админа                                                |
-| `admins.telegram_id`     | да   | идентификатор человека в Telegram                         |
-| `audit_log.payload`      | да*  | может содержать комментарий с PII — см. правило ниже      |
+| Колонка                       | PII? | Комментарий                                                |
+|-------------------------------|------|------------------------------------------------------------|
+| `leads.name`                  | да   | имя из формы                                               |
+| `leads.contact`               | да   | контакт клиента (tg/phone/email)                           |
+| `leads.message`               | да*  | свободный текст, может содержать любые данные              |
+| `leads.consent_ip`            | да   | IP клиента в момент подачи заявки                          |
+| `leads.consent_user_agent`    | да   | User-Agent клиента в момент подачи заявки                  |
+| `leads.consent_personal_data` | нет  | булев флаг согласия                                        |
+| `leads.consent_policy_version`| нет  | строка версии текста согласия                              |
+| `leads.consent_given_at`      | нет  | временная метка фиксации согласия                          |
+| `leads.source`                | нет  | технический идентификатор секции                           |
+| `leads.status`                | нет  | состояние                                                  |
+| `leads.*_at` / `*_by`         | нет  | временные метки и id админов                               |
+| `admins.username`             | да   | telegram-handle админа                                     |
+| `admins.display_name`         | да   | имя админа                                                 |
+| `admins.telegram_id`          | да   | идентификатор человека в Telegram                          |
+| `audit_log.payload`           | да*  | может содержать комментарий с PII — см. правило ниже       |
 
 **Правила обращения с PII:**
 
 - В логи приложения PII **не пишем** в виде plaintext. ID заявки и `audit_log.id` — можно.
-- Доступ к таблицам — только через `SUPABASE_SERVICE_ROLE_KEY` на сервере (Next.js Route Handlers, Python-бот). В браузер сервисный ключ не выходит. Это уже зафиксировано в `docs/backend-decision.md`.
+- Доступ к таблицам — только через сервисный ключ на сервере (Next.js Route Handlers, Python-бот). В браузер сервисные ключи не выходят. Это зафиксировано в `docs/backend-decision.md` для обоих режимов (sandbox/prod).
 - В `callback_data` Telegram — только `lead_id` (UUID), никаких `name` / `contact`.
-- Удаление по запросу клиента: ставим заглушки в `name`, `contact`, `message` (например, `__deleted__`), сохраняем `id` и `status` для целостности `audit_log`. Полный `DELETE` не используем.
+- Удаление по запросу клиента: ставим заглушки в `name`, `contact`, `message`, `consent_ip`, `consent_user_agent` (например, `__deleted__` / `NULL` для `inet`), сохраняем `id`, `status`, `consent_*` метаданные (факт согласия, версия, момент) для целостности `audit_log` и доказательства того, что согласие было получено в момент подачи. Полный `DELETE` не используем.
+- **Локализация ПДн (152-ФЗ).** В production реальные ПДн пишем только в RU-hosted PostgreSQL (Yandex Cloud Managed). В sandbox Supabase реальные ПДн **запрещены** — туда едут только синтетические данные. Граница описана в `docs/backend-decision.md`.
 
 ---
 
@@ -253,7 +270,8 @@ new ──► in_progress ──► done
 - **`users` — пользователи бота вне админов.** В MVP БД таблицу не заводим: `/start` в первой итерации stateless для гостя, что согласовано с `docs/bot-flows.md`. Таблица появится вместе с рассылками или сегментацией — тогда оба документа обновляем синхронно (включая `users.opt_out` для `/stop`).
 - **`broadcasts` + `broadcast_recipients`.** Рассылки в MVP — заглушка в боте (см. `docs/bot-flows.md`).
 - **`faq_items`.** FAQ хранится в коде бота, миграция в БД — после стабилизации списка вопросов.
-- **`opt_out` / `consent` поля.** Понадобятся вместе с рассылками. Сейчас формы не запрашивают подписку на рассылки.
+- **`opt_out` для рассылок.** Появится вместе с таблицей `users` и блоком рассылок. Это **другое** согласие, не путать с `consent_personal_data` на ОПД, который уже зафиксирован в `leads` как обязательное архитектурное поле.
+- **Юридический пакет 152-ФЗ.** Не относится к схеме БД, но логически связан: Privacy Policy / шаблон согласия на ОПД, уведомление РКН, ответственный за ПДн, регламент инцидентов, точные сроки хранения по целям. Висит как production-checklist в `tasks/todo.md`. Схема БД готова к их появлению — `consent_*` поля уже есть.
 - **RLS (Row Level Security) политики.** Доступ к БД идёт только через сервисный ключ на сервере — RLS можно подключить, но в MVP она не критична. Включаем при появлении клиентского SDK-доступа.
 - **Партиционирование `audit_log`.** При росте лога более чем на десятки тысяч строк в месяц — партиционируем по `created_at`. На MVP объёмах это преждевременно.
 - **Soft-delete заявок (`deleted_at`).** Сейчас удаление через зануление PII (см. раздел про PII). Если появится requirement на «корзину» — добавим колонку.
