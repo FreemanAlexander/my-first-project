@@ -56,7 +56,7 @@
 
 ## 5. Database / env
 
-- [ ] Описать схему данных в `db/schema.md`: таблицы `users`, `leads`, `broadcasts`, `audit_log`.
+- [x] Описать схему данных в `db/schema.md`: MVP-таблицы `leads`, `audit_log`, `admins` со статусами заявки, PII-картой, индексами и тем, что хранить нельзя. `users`, `broadcasts`, `faq_items` отложены явно.
 - [ ] Завести миграции (инструмент по стеку: Prisma / Alembic / Drizzle / голый SQL).
 - [ ] Дополнить `.env.example` всеми ключами: `BOT_TOKEN`, `DATABASE_URL`, `ADMIN_IDS`, `WEB_BASE_URL`, ключи внешних сервисов.
 - [ ] Проверить `.gitignore`: `.env`, `.env.*`, `*.key`, `*.pem`, `secrets/` должны игнорироваться.
