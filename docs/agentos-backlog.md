@@ -118,3 +118,86 @@ Done result:
 - transcript_chars: `21966`
 - Mnemo CLAUDE.md обновлён
 
+
+### AGENTOS-004 — Telegram-chip decision / user-account access
+
+status: `open`  
+priority: `P1`  
+owner/agent: `mnemo` / later `atlas`  
+area: `telegram-chip`, `Telethon`, `Telegram user-account`
+
+Context:
+
+`telegram-chip` подключён как skill к Mnemo, но не активирован.
+
+Это Telegram user-account / MTProto слой, не обычный bot API. Сейчас основной inbox уже работает через Telegram bot API.
+
+Why not now:
+
+- user-account automation = higher risk;
+- нужен API_ID / API_HASH / session string;
+- session string равен доступу к Telegram-аккаунту;
+- нельзя запускать несколько Telethon-процессов на одну session string.
+
+Next action:
+
+1. Отдельно решить, нужен ли user-account доступ.
+2. Если нужен — подготовить план безопасности.
+3. Только потом получать API_ID / API_HASH и запускать telegram-chip.
+
+### AGENTOS-005 — Instagram-superpower setup
+
+status: `open`  
+priority: `P2`  
+owner/agent: `mnemo` / `prometheus`  
+area: `instagram`, `HikerAPI`, `content research`
+
+Context:
+
+`instagram-superpower` подключён как skill к Mnemo, но требует HikerAPI key.
+
+Next action:
+
+1. Решить, нужен ли Instagram сбор прямо сейчас.
+2. Получить HikerAPI key.
+3. Сохранить ключ безопасно.
+4. Прогнать smoke на публичном Instagram account.
+5. Зафиксировать status.
+
+### AGENTOS-006 — Twitter/X skill smoke
+
+status: `open`  
+priority: `P2`  
+owner/agent: `mnemo`  
+area: `twitter`, `x`, `fxtwitter`, `socialdata`
+
+Context:
+
+`twitter` подключён как skill к Mnemo.
+
+Free path через FxTwitter может работать без ключа для одиночных tweets/profiles. SocialData key нужен для расширенных задач.
+
+Next action:
+
+1. Прогнать free FxTwitter smoke на публичном tweet/profile.
+2. Если нужно — отдельно решить по SocialData API key.
+3. Зафиксировать status.
+
+### AGENTOS-007 — Perplexity research setup
+
+status: `open`  
+priority: `P2`  
+owner/agent: `mnemo` / `prometheus` / `daedalus`  
+area: `research`, `perplexity`, `sonar`
+
+Context:
+
+`perplexity-research` подключён как skill к Mnemo, но требует Perplexity API key.
+
+Next action:
+
+1. Решить, нужен ли Perplexity сейчас или позже.
+2. Получить API key.
+3. Сохранить ключ безопасно.
+4. Прогнать research smoke.
+5. Зафиксировать status.
