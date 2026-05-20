@@ -121,7 +121,7 @@ Done result:
 
 ### AGENTOS-004 — Telegram-chip decision / user-account access
 
-status: `doing`  
+status: `done`  
 priority: `P1`  
 owner/agent: `mnemo` / later `atlas`  
 area: `telegram-chip`, `Telethon`, `Telegram user-account`
@@ -148,11 +148,26 @@ Decision 2026-05-20:
 - главный аккаунт, клан и личные переписки вынести в отдельную Telegram Access Policy позже;
 - возможно позже завести третий Telegram-аккаунт для отдельного разделения личной/операционной переписки.
 
-Next action:
+Done result:
 
-1. Подготовить отдельный runtime для telegram-chip research account.
-2. Если нужен — подготовить план безопасности.
-3. Только потом получать API_ID / API_HASH и запускать telegram-chip.
+- главный Telegram-аккаунт не подключали;
+- создан отдельный runtime `/home/agentos/.claude-lab/telegram-chip-research`;
+- research-аккаунт авторизован через Telethon session string;
+- session string не выводился в чат;
+- API health check прошёл: `telegram_connected=true`;
+- read-only smoke прошёл;
+- channel messages read прошёл;
+- создан пустой `config/watchlist.json`;
+- создан `config/watchlist.example.json`;
+- API-процесс остановлен после smoke.
+
+Next action later:
+
+1. Составить real Telegram research watchlist.
+2. Добавить 20–30 каналов/групп competitors / experts / references.
+3. Сделать collector по watchlist.
+4. Подключить сохранение в Mnemo/gbrain.
+5. Передавать результаты Prometheus для контент-анализа.
 
 ### AGENTOS-005 — Instagram-superpower setup
 
@@ -229,3 +244,28 @@ Next action later:
 1. Оценить, сколько research-запросов реально нужно в неделю.
 2. Решить, нужен ли Perplexity именно Mnemo или лучше Atlas/Prometheus.
 3. Если ROI понятен — купить credits, сохранить ключ и прогнать smoke.
+
+### AGENTOS-008 — Populate Telegram research watchlist
+
+status: `open`  
+priority: `P2`  
+owner/agent: `mnemo` / `prometheus`  
+area: `telegram-chip`, `watchlist`, `content research`
+
+Context:
+
+Telegram-chip research runtime работает, но реальный watchlist пока пустой.
+
+Канал Эда Халилова использовался только как smoke/test source и не является реальным целевым источником.
+
+Next action:
+
+1. Позже выбрать реальные Telegram-источники:
+   - competitors
+   - experts
+   - market
+   - references
+2. Добавить их в `/home/agentos/.claude-lab/telegram-chip-research/config/watchlist.json`.
+3. Сделать collector, который обходит все источники пакетно.
+4. Сохранять результаты в Mnemo/gbrain.
+5. Передавать Prometheus для анализа тем, болей, хуков и формулировок.
