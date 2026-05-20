@@ -166,7 +166,7 @@ Next action:
 
 ### AGENTOS-006 — Twitter/X skill smoke
 
-status: `open`  
+status: `done`  
 priority: `P2`  
 owner/agent: `mnemo`  
 area: `twitter`, `x`, `fxtwitter`, `socialdata`
@@ -177,11 +177,15 @@ Context:
 
 Free path через FxTwitter может работать без ключа для одиночных tweets/profiles. SocialData key нужен для расширенных задач.
 
-Next action:
+Done result:
 
-1. Прогнать free FxTwitter smoke на публичном tweet/profile.
-2. Если нужно — отдельно решить по SocialData API key.
-3. Зафиксировать status.
+- free FxTwitter smoke прошёл на публичном X-профиле
+- profile URL: `https://x.com/BarackObama`
+- endpoint: `https://api.fxtwitter.com/BarackObama`
+- code: `200`
+- name: `Barack Obama`
+- screen_name: `BarackObama`
+- SocialData API key пока не нужен; оставить для расширенных задач
 
 ### AGENTOS-007 — Perplexity research setup
 
