@@ -147,7 +147,7 @@ Next action:
 
 ### AGENTOS-005 — Instagram-superpower setup
 
-status: `open`  
+status: `done`  
 priority: `P2`  
 owner/agent: `mnemo` / `prometheus`  
 area: `instagram`, `HikerAPI`, `content research`
@@ -156,13 +156,19 @@ Context:
 
 `instagram-superpower` подключён как skill к Mnemo, но требует HikerAPI key.
 
-Next action:
+Done result:
 
-1. Решить, нужен ли Instagram сбор прямо сейчас.
-2. Получить HikerAPI key.
-3. Сохранить ключ безопасно.
-4. Прогнать smoke на публичном Instagram account.
-5. Зафиксировать status.
+- HikerAPI key получен и сохранён в `~/.secrets/hikerapi/api-key`
+- balance check прошёл
+- balance: `$2.00`
+- remaining requests: `98`
+- smoke выполнен через `scripts/analyze.sh freemanlifelab 5 30`
+- аккаунт найден: `@freemanlifelab`
+- full name: `Александр Фриман`
+- followers: `6,414`
+- posts: `184`
+- найдено `0 reels in last 30 days`, но API/profile smoke прошёл успешно
+- Mnemo CLAUDE.md обновлён
 
 ### AGENTOS-006 — Twitter/X skill smoke
 
