@@ -189,7 +189,7 @@ Done result:
 
 ### AGENTOS-007 — Perplexity research setup
 
-status: `open`  
+status: `blocked`  
 priority: `P2`  
 owner/agent: `mnemo` / `prometheus` / `daedalus`  
 area: `research`, `perplexity`, `sonar`
@@ -198,10 +198,19 @@ Context:
 
 `perplexity-research` подключён как skill к Mnemo, но требует Perplexity API key.
 
-Next action:
+Blocked reason:
 
-1. Решить, нужен ли Perplexity сейчас или позже.
-2. Получить API key.
-3. Сохранить ключ безопасно.
-4. Прогнать research smoke.
-5. Зафиксировать status.
+Perplexity API сейчас просит пополнить баланс / credits. Минимальный практический порог для Tier 1 — около `$50+ credits purchased`.
+
+Решение на 2026-05-20:
+
+- не оплачивать Perplexity сейчас;
+- не блокировать Day 4 из-за research API;
+- использовать уже рабочие каналы Mnemo;
+- вернуться к Perplexity позже, когда будет понятна реальная частота research-задач.
+
+Next action later:
+
+1. Оценить, сколько research-запросов реально нужно в неделю.
+2. Решить, нужен ли Perplexity именно Mnemo или лучше Atlas/Prometheus.
+3. Если ROI понятен — купить credits, сохранить ключ и прогнать smoke.
