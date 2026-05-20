@@ -96,7 +96,7 @@ Next action:
 
 ### AGENTOS-003 — Подключить transcript skill
 
-status: `open`  
+status: `done`  
 priority: `P1`  
 owner/agent: `mnemo`  
 area: `skills`, `youtube`, `transcript`
@@ -105,11 +105,16 @@ Context:
 
 Skill `transcript` установлен per-agent у Mnemo, но ждёт `TRANSCRIPT_API_KEY`.
 
-Next action:
+Done result:
 
-1. Получить `TRANSCRIPT_API_KEY`.
-2. Сохранить в secrets без вывода в чат.
-3. Прогнать YouTube transcript smoke.
-4. Обновить Mnemo CLAUDE.md.
-5. Зафиксировать snapshot.
+- `TRANSCRIPT_API_KEY` получен через TranscriptAPI email + OTP flow.
+- ключ сохранён в `/home/agentos/.claude-lab/inbox-agent/secrets/transcript-api-key`
+- права файла: `600`
+- временный `transcript-session-token` удалён
+- smoke test прошёл на YouTube URL
+- HTTP code: `200`
+- video_id: `OGielMpTED8`
+- language: `ru`
+- transcript_chars: `21966`
+- Mnemo CLAUDE.md обновлён
 
