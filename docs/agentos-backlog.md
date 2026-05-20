@@ -121,7 +121,7 @@ Done result:
 
 ### AGENTOS-004 — Telegram-chip decision / user-account access
 
-status: `open`  
+status: `doing`  
 priority: `P1`  
 owner/agent: `mnemo` / later `atlas`  
 area: `telegram-chip`, `Telethon`, `Telegram user-account`
@@ -139,9 +139,18 @@ Why not now:
 - session string равен доступу к Telegram-аккаунту;
 - нельзя запускать несколько Telethon-процессов на одну session string.
 
+Decision 2026-05-20:
+
+- главный Telegram-аккаунт НЕ подключать сейчас;
+- telegram-chip проверять только на втором / research-аккаунте;
+- режим первого smoke: read-only;
+- автоответы, отправка сообщений и массовый сбор личных переписок запрещены;
+- главный аккаунт, клан и личные переписки вынести в отдельную Telegram Access Policy позже;
+- возможно позже завести третий Telegram-аккаунт для отдельного разделения личной/операционной переписки.
+
 Next action:
 
-1. Отдельно решить, нужен ли user-account доступ.
+1. Подготовить отдельный runtime для telegram-chip research account.
 2. Если нужен — подготовить план безопасности.
 3. Только потом получать API_ID / API_HASH и запускать telegram-chip.
 
