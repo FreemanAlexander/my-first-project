@@ -86,3 +86,21 @@ Edith пока не подключена к `agentos-gateway`, потому чт
 3. Расширить accounting: task_type, model, tool_calls_count, estimated_cost_usd.
 4. Сделать daily/weekly отчёт по `runs.jsonl`.
 5. Зафиксировать gateway config template для новых агентов.
+
+## UX / status window smoke
+
+Проверен Jarvis-style UX на длинной задаче Homer.
+
+Результат:
+
+- status window появился;
+- `working -- Ns` отображался;
+- task длилась около 72 секунд;
+- финальный ответ пришёл;
+- accounting записал run для `homer` с `duration_ms=72208`.
+
+Вывод:
+
+- `streaming_mode_private=progress` работает;
+- status window не требует патча;
+- короткие задачи могут завершаться слишком быстро, поэтому окно почти незаметно.
