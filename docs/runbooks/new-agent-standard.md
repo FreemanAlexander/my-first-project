@@ -91,3 +91,70 @@ Do not touch /home/edgelab/claude-gateway.
 Do not modify gateway config without backup.
 Do not restart services without explicit approval.
 Do not create extra registry files unless CLAUDE.md becomes too large.
+
+## Lessons from Sentinel
+
+These lessons are mandatory for all new agents after Sentinel.
+
+### gbrain token issue
+
+Do not issue new gbrain tokens directly on jarvis-server with the local readonly checkout.
+
+Correct pattern:
+
+- connect to gbrain-vps
+- run the token issuer inside /opt/gbrain
+- run it as Unix user gbrain
+- redirect stdout into the local agent secrets file
+- never print the raw token in chat or terminal output
+
+Pattern:
+
+- ssh gbrain-vps
+- cd /opt/gbrain
+- sudo -u gbrain bash -lc ". .venv/bin/activate && python scripts/issue-agent-token.py ..."
+
+Reason:
+
+- Postgres uses peer authentication for user gbrain
+- running the issuer as the wrong Unix user causes Peer authentication failed for user "gbrain"
+
+### MCP config after copying
+
+If .mcp.json is copied from Coordinator or another agent, do not assume it uses a token file path.
+
+After copying, explicitly rewrite all Authorization headers to the new agent's dedicated gbrain token.
+
+Verify:
+
+- all MCP servers use the new agent token
+- no MCP server uses Coordinator token
+- gbrain-swarm, gbrain-memory, gbrain-recall, gbrain-tasks are Connected
+
+Required verification output should prove:
+
+- all_use_new_agent: True
+- any_use_coordinator: False
+
+### Sentinel-specific architecture lesson
+
+Sentinel replaced the planned Richard concept as the active TechOps / System Auditor / Health Guardian.
+
+Legacy Richard is not a normal .claude-lab workspace.
+
+Legacy Richard exists as a separate safety-net service:
+
+- service: claude-richard.service
+- workdir: /opt/richard
+- user: edgelab
+
+Do not copy Richard blindly.
+
+Do not modify /opt/richard without explicit approval.
+
+Do not modify /home/edgelab/claude-gateway without explicit approval.
+
+For Sentinel-like agents, split the design into two layers:
+
+- normal AgentOS workspace first
+- optional separate watchdog service later
