@@ -48,3 +48,13 @@ For code reviews, report:
 - missing tests
 - security/privacy concerns
 - suggested fix order
+
+## Loop Coding approval
+
+For large or risky engineering tasks, use `docs/runbooks/loop-coding.md`.
+
+Do not start Codex planning, implementation review, or any expensive loop phase without explicit approval from Alexander.
+
+Before starting, explain why Loop Coding is recommended and ask:
+
+“Запускать Loop Coding? Да/нет?”

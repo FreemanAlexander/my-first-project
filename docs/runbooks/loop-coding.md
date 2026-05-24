@@ -56,6 +56,37 @@ Sentinel:
 - checks health, services, logs, system safety
 - involved before/after deploy-like changes
 
+## Approval gate
+
+Before starting Loop Coding, the agent must explicitly warn Alexander.
+
+The agent must say:
+
+- why Loop Coding is recommended
+- which risk triggered it
+- which phases will run
+- whether Codex will be used
+- whether this may spend additional tokens
+- what the first artifact will be
+
+The agent must ask for explicit approval before:
+
+- Phase 2 Codex Plan
+- Phase 3 Homer Implement
+- Phase 4 Codex Review
+- Phase 6 Ship
+
+Allowed without approval:
+
+- Phase 0 Context Gather if it uses only local shell/grep and no LLM
+- explaining that Loop Coding is recommended
+
+Required confirmation phrase:
+
+- “Запускать Loop Coding? Да/нет?”
+
+If Alexander does not approve, do not start the loop.
+
 ## Phase 0 — Context Gather
 
 Goal: collect local context without LLM when possible.
