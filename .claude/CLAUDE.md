@@ -39,8 +39,8 @@
 
 ### Core repo
 
-- Основной репозиторий: `/home/agentos/my-first-project`
-- GitHub: `FreemanAlexander/my-first-project`
+- Основной репозиторий: `/home/agentos/pml-project`
+- GitHub: `FreemanAlexander/pml-project`
 - Ветка по умолчанию: `main`
 - Learning snapshots: `docs/learning-snapshots/`
 

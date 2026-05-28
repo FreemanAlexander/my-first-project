@@ -1,4 +1,4 @@
-# Codex instructions for my-first-project
+# Codex instructions for pml-project
 
 This repository is part of Alexander Freeman's AgentOS / Claude Code learning project.
 
@@ -31,7 +31,7 @@ Important paths:
 
 - /home/agentos/.claude-lab
 - /home/agentos/.claude-lab/agentos-gateway
-- /home/agentos/my-first-project
+- /home/agentos/pml-project
 - docs/learning-snapshots
 - docs/reviews
 

@@ -39,8 +39,8 @@
 
 ### Core repo
 
-- Основной репозиторий: `/home/agentos/my-first-project`
-- GitHub: `FreemanAlexander/my-first-project`
+- Основной репозиторий: `/home/agentos/pml-project`
+- GitHub: `FreemanAlexander/pml-project`
 - Ветка по умолчанию: `main`
 - Learning snapshots: `docs/learning-snapshots/`
 
@@ -61,33 +61,33 @@ OpenViking пока не внедрять как второй центральн
 
 Jarvis / Richard = legacy / prototype контур. Не трогать без отдельного аудита.
 
-### inbox-agent / Mnemo foundation
+### Second Brain / inbox — Edith
 
-Текущий рабочий inbox-agent:
+Текущий рабочий Second Brain агент:
 
-- path: `/home/agentos/.claude-lab/inbox-agent`
-- Telegram bot: Freeman Inbox
+- path: `/home/agentos/.claude-lab/edith`
+- Telegram bot: `@Freeman_Edith_Bot`
 - принимает сообщения от двух Telegram-аккаунтов через allowlist:
   - главный аккаунт: `370621610`
   - технический аккаунт: `8892233735`
-- пишет raw-файлы локально;
-- пишет external notes в gbrain;
+- пишет raw-файлы локально (`raw/`);
+- пишет external notes в gbrain (dual-write);
 - compile cron каждые 15 минут;
-- daily digest каждый день в `05:00 UTC = 08:00 MSK = 12:00 Thailand`.
+- daily digest каждый день в `01:00 UTC = 04:00 MSK = 08:00 Thailand`.
 
-Текущий inbox-agent позже оформляется как полноценный агент `mnemo`.
+## Agent naming (current)
 
-## Agent naming direction
+Активные агенты:
 
-Рабочие имена агентов:
+- `edith` — Second Brain / inbox / monitoring (порт 8091, `@Freeman_Edith_Bot`)
+- `marketer` — marketing / content / traffic (порт 8090, `@Freeman_Marketer_Bot`)
+- `homer` — coder / architect / technical fixes (порт 8089, `@Freeman_Homer_Bot`)
 
-- `mnemo` — Second Brain / inbox / monitoring
-- `prometheus` — marketing / content / traffic
-- `daedalus` — coder / architect / technical fixes
-- `atlas` — coordinator / chief of staff, later
-- `argus` — monitoring / intelligence, later
+Pending агенты (создаются по мере необходимости):
+- `coordinator` — chief of staff, диспетчер задач (пока не активирован)
+- `sentinel` — monitoring / intelligence (пока не активирован)
 
-Имена можно поменять до финального внедрения. Не создавать новых агентов без подтверждения роли и назначения.
+Не создавать новых агентов без подтверждения роли и назначения.
 
 ## Instruction hierarchy
 
@@ -182,17 +182,31 @@ Day 3 закрыт production-like v1:
 - cron enabled;
 - final commit: `2ef2919 Зафиксировал cron inbox-agent`.
 
-## Day 4 direction
+## Current state (2026-05-28)
 
-Day 4 начинается с проектирования команды агентов.
+Команда из 3 активных агентов работает:
+- `edith` (Second Brain) — `/home/agentos/.claude-lab/edith/`
+- `marketer` (контент / маркетинг) — `/home/agentos/.claude-lab/marketer/`
+- `homer` (кодер / архитектор) — `/home/agentos/.claude-lab/homer/`
 
-Порядок:
+Инфраструктура production-like v1:
+- gbrain (Postgres + pgvector + 4 MCP сервера: memory/recall/swarm/tasks)
+- Reverse SSH tunnel + webhook listener для inter-agent push (<2 сек доставка)
+- 5 типов hooks (Stop/SessionStart/PreCompact/PostToolUse/PreToolUse safety)
+- 3 Telegram бота агентов + 1 публичный (@Freeman_lab_bot для ПМЛ аудитории)
+- 6 systemd services активны
+- Cron: compile каждые 15 мин, daily digest 01:00 UTC (8 утра Бангкок)
 
-1. привести project CLAUDE.md в production-like v1 состояние;
-2. создать / оформить `mnemo` как полноценного Second Brain агента;
-3. потом `prometheus` как маркетолога;
-4. потом `daedalus` как кодера / архитектора;
-5. только потом Telegram-chip, Instagram API, YouTube/X integrations, Hermes и дополнительные скиллы.
+Phase 4d audit (2026-05-28) — score 5/5 у всех 3 агентов по сравнению с `public-architecture-claude-code` reference.
+
+## Next steps
+
+Pending для активации:
+- `coordinator` агент (диспетчер) — когда количество inter-agent задач вырастет
+- Auto-spawn (получатель swarm.notify запускается моментально) — решение Александра pending
+- Раздел `/pml` на freemanalexander.ru (миграция с Tilda → Next.js — позже)
+- Интеграция форм сайта с CRM на Yandex Cloud (делает Миша)
+- Marketer content workflow: анализ конкурентов IG/TG → HTML-план → телесуфлёр + brief монтажёру (gbrain note: `marketer roadmap pml`)
 
 ## Style
 

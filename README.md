@@ -54,7 +54,7 @@ CLAUDE.md
 ## Рабочая папка
 
 ```bash
-cd /home/agentos/my-first-project
+cd /home/agentos/pml-project
 ```
 
 ## Базовые проверки
